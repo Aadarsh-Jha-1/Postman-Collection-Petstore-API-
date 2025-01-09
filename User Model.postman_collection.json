@@ -1,0 +1,348 @@
+{
+	"info": {
+		"_postman_id": "34b83b9d-dd65-4440-98d4-63756b2cb3e3",
+		"name": "User Model",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34437846"
+	},
+	"item": [
+		{
+			"name": "Add User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"//test\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const randomNum = Math.floor((Math.random()*100+1));\r",
+							"var randomStr = Math.random().toString(36).substring(2,2+4);\r",
+							"\r",
+							"pm.environment.set(\"id_no\",randomNum);\r",
+							"pm.collectionVariables.set(\"user_name\",randomStr);\r",
+							"pm.collectionVariables.set(\"first_Name\",randomStr);\r",
+							"pm.collectionVariables.set(\"last_Name\",randomStr);\r",
+							"pm.collectionVariables.set(\"email_\",randomStr+\"@vibez.com\");\r",
+							"pm.collectionVariables.set(\"password_\",randomStr+\"@12Ab\");\r",
+							"pm.collectionVariables.set(\"phone_\",\"995588632\");\r",
+							"pm.collectionVariables.set(\"user_Status\",0);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n  {\r\n    \"id\": {{id_no}},\r\n    \"username\": \"{{user_name}}\",\r\n    \"firstName\": \"{{first_Name}}\",\r\n    \"lastName\": \"{{last_Name}}\",\r\n    \"email\": \"{{email_}}\",\r\n    \"password\": \"{{password_}}\",\r\n    \"phone\": \"{{phone_}}\",\r\n    \"userStatus\": {{user_Status}}\r\n  }\r\n]"
+				},
+				"url": {
+					"raw": "https://petstore.swagger.io/v2/user/createWithList",
+					"protocol": "https",
+					"host": [
+						"petstore",
+						"swagger",
+						"io"
+					],
+					"path": [
+						"v2",
+						"user",
+						"createWithList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// variable declaration to catch the response\r",
+							"const responseData = pm.response.json();\r",
+							"\r",
+							"//Test For Status Code 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//Test For Data Type Verification\r",
+							"pm.test(\"Get Response Data Type Verification \",()=>{\r",
+							"\r",
+							"pm.expect(responseData.id).to.be.a(\"Number\");\r",
+							"pm.expect(responseData.username).to.be.a(\"String\");\r",
+							"pm.expect(responseData.firstName).to.be.a(\"String\");\r",
+							" pm.expect(responseData.lastName).to.be.a(\"String\");\r",
+							" pm.expect(responseData.email).to.be.a(\"String\");\r",
+							" pm.expect(responseData.password).to.be.a(\"String\");\r",
+							" pm.expect(responseData.phone).to.be.a(\"String\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//Test For Response Value Verification\r",
+							"pm.test(\"Get Response value Verification \",()=>{\r",
+							"\r",
+							"pm.expect(responseData.id).to.eql(pm.environment.get(\"id_no\"));\r",
+							"pm.expect(responseData.username).to.eql(pm.collectionVariables.get(\"user_name\"));\r",
+							"pm.expect(responseData.firstName).to.eql(pm.collectionVariables.get(\"first_Name\"));\r",
+							" pm.expect(responseData.lastName).to.eql(pm.collectionVariables.get(\"last_Name\"));\r",
+							" pm.expect(responseData.email).to.eql(pm.collectionVariables.get(\"email_\"));\r",
+							" pm.expect(responseData.password).to.eql(pm.collectionVariables.get(\"password_\"));\r",
+							" pm.expect(responseData.phone).to.eql(pm.collectionVariables.get(\"phone_\"));\r",
+							"  pm.expect(responseData.userStatus).to.eql(pm.collectionVariables.get(\"user_Status\"));\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://petstore.swagger.io/v2/user/{{user_name}}",
+					"protocol": "https",
+					"host": [
+						"petstore",
+						"swagger",
+						"io"
+					],
+					"path": [
+						"v2",
+						"user",
+						"{{user_name}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var updateStr = Math.random().toString(36).substring(2);\r",
+							"pm.collectionVariables.set(\"password\",updateStr);\r",
+							"pm.collectionVariables.set(\"phone\",\"9956582\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n  {\r\n    \"id\": {{id_no}},\r\n    \"username\": \"{{user_name}}\",\r\n    \"firstName\": \"{{first_Name}}\",\r\n    \"lastName\": \"{{last_Name}}\",\r\n    \"email\": \"{{email_}}\",\r\n    \"password\": \"{{password}}\",\r\n    \"phone\": \"{{phone}}\",\r\n    \"userStatus\": {{user_Status}}\r\n  }\r\n"
+				},
+				"url": {
+					"raw": "https://petstore.swagger.io/v2/user/{{user_name}}",
+					"protocol": "https",
+					"host": [
+						"petstore",
+						"swagger",
+						"io"
+					],
+					"path": [
+						"v2",
+						"user",
+						"{{user_name}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://petstore.swagger.io/v2/user/{{user_name}}",
+					"protocol": "https",
+					"host": [
+						"petstore",
+						"swagger",
+						"io"
+					],
+					"path": [
+						"v2",
+						"user",
+						"{{user_name}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "username",
+			"value": "nction random() { [native code] }"
+		},
+		{
+			"key": "firstName",
+			"value": ""
+		},
+		{
+			"key": "lastName",
+			"value": ""
+		},
+		{
+			"key": "email",
+			"value": ""
+		},
+		{
+			"key": "password",
+			"value": ""
+		},
+		{
+			"key": "phone",
+			"value": ""
+		},
+		{
+			"key": "userStatus",
+			"value": ""
+		},
+		{
+			"key": "user_name",
+			"value": ""
+		},
+		{
+			"key": "first_Name",
+			"value": ""
+		},
+		{
+			"key": "last_Name",
+			"value": ""
+		},
+		{
+			"key": "email_",
+			"value": ""
+		},
+		{
+			"key": "password_",
+			"value": ""
+		},
+		{
+			"key": "phone_",
+			"value": ""
+		},
+		{
+			"key": "user_Status",
+			"value": ""
+		},
+		{
+			"key": "f_Name",
+			"value": ""
+		},
+		{
+			"key": "l_Name",
+			"value": ""
+		}
+	]
+}
