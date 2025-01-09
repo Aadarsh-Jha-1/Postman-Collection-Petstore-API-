@@ -66,12 +66,9 @@
 					"raw": "[\r\n  {\r\n    \"id\": {{id_no}},\r\n    \"username\": \"{{user_name}}\",\r\n    \"firstName\": \"{{first_Name}}\",\r\n    \"lastName\": \"{{last_Name}}\",\r\n    \"email\": \"{{email_}}\",\r\n    \"password\": \"{{password_}}\",\r\n    \"phone\": \"{{phone_}}\",\r\n    \"userStatus\": {{user_Status}}\r\n  }\r\n]"
 				},
 				"url": {
-					"raw": "https://petstore.swagger.io/v2/user/createWithList",
-					"protocol": "https",
+					"raw": "{{base_URL}}/v2/user/createWithList",
 					"host": [
-						"petstore",
-						"swagger",
-						"io"
+						"{{base_URL}}"
 					],
 					"path": [
 						"v2",
@@ -138,12 +135,9 @@
 					}
 				],
 				"url": {
-					"raw": "https://petstore.swagger.io/v2/user/{{user_name}}",
-					"protocol": "https",
+					"raw": "{{base_URL}}/v2/user/{{user_name}}",
 					"host": [
-						"petstore",
-						"swagger",
-						"io"
+						"{{base_URL}}"
 					],
 					"path": [
 						"v2",
@@ -199,12 +193,9 @@
 					"raw": "\r\n  {\r\n    \"id\": {{id_no}},\r\n    \"username\": \"{{user_name}}\",\r\n    \"firstName\": \"{{first_Name}}\",\r\n    \"lastName\": \"{{last_Name}}\",\r\n    \"email\": \"{{email_}}\",\r\n    \"password\": \"{{password}}\",\r\n    \"phone\": \"{{phone}}\",\r\n    \"userStatus\": {{user_Status}}\r\n  }\r\n"
 				},
 				"url": {
-					"raw": "https://petstore.swagger.io/v2/user/{{user_name}}",
-					"protocol": "https",
+					"raw": "{{base_URL}}/v2/user/{{user_name}}",
 					"host": [
-						"petstore",
-						"swagger",
-						"io"
+						"{{base_URL}}"
 					],
 					"path": [
 						"v2",
@@ -240,12 +231,9 @@
 					}
 				],
 				"url": {
-					"raw": "https://petstore.swagger.io/v2/user/{{user_name}}",
-					"protocol": "https",
+					"raw": "{{base_URL}}/v2/user/{{user_name}}",
 					"host": [
-						"petstore",
-						"swagger",
-						"io"
+						"{{base_URL}}"
 					],
 					"path": [
 						"v2",
@@ -343,6 +331,11 @@
 		{
 			"key": "l_Name",
 			"value": ""
+		},
+		{
+			"key": "base_URL",
+			"value": "https://petstore.swagger.io",
+			"type": "string"
 		}
 	]
 }
