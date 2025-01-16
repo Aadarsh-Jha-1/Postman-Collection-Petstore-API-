@@ -17,7 +17,7 @@ In addition, the project is integrated with **Newman**, the command-line tool fo
 ## Project Structure
 
 The project follows a well-organized structure with folders and files that separate different functionalities and modules.
-
+```graphql
 Postman-API-Testing/
 │
 ├── IndividualModules/
@@ -30,6 +30,7 @@ Postman-API-Testing/
 │
 ├── Petstore-API-Collection.postman_collection.json # Combined collection of all 3 modules
 └── README.md                                       # Project documentation
+```
 
 
 ### Folder & File Descriptions:
@@ -68,7 +69,7 @@ pm.test("Status code is 200", function () {
 pm.test("Response contains pet name", function () {
     pm.response.to.have.body('doggie');
 });
-
+```
 
 ### Running the Collection in Postman
 
