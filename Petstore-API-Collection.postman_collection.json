@@ -1,0 +1,1017 @@
+{
+	"info": {
+		"_postman_id": "1b346107-7f5b-4630-a18b-db1c4af57ba6",
+		"name": "Petstore-API-Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34437846"
+	},
+	"item": [
+		{
+			"name": "Pet",
+			"item": [
+				{
+					"name": "Upload Pet Image",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var randomStr = Math.random().toString(36).substring(2, 2 + 4).replace(/[^a-zA-Z]/g,'');\r",
+									"\r",
+									"pm.collectionVariables.set(\"textData\",randomStr);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// variable declaration to catch the response\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"//Test For Status Code 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Get Response Data Type Verification \",()=>{\r",
+									"    pm.expect(responseData.code).to.be.a(\"number\");\r",
+									"    pm.expect(responseData.type).to.be.a(\"string\");\r",
+									"    pm.expect(responseData.message).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "additionalMetadata",
+									"value": "{{textData}}",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"value": "image.jpg",
+									"contentType": "image/png",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{Base_Url}}/pet/1/uploadImage",
+							"host": [
+								"{{Base_Url}}"
+							],
+							"path": [
+								"pet",
+								"1",
+								"uploadImage"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://petstore.swagger.io/v2/pet/1/uploadImage' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: multipart/form-data' \\\r\n  -F 'additionalMetadata=pet' \\\r\n  -F 'file=@Screenshot_6.png;type=image/png'"
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Pet",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var randomStr1 = Math.random().toString(36).substring(2, 2 + 4).replace(/[^a-zA-Z]/g,'');\r",
+									"var randomStr2 = Math.random().toString(36).substring(2, 2 + 4).replace(/[^a-zA-Z]/g,'');\r",
+									"const randomNum = Math.floor((Math.random()*100+1));\r",
+									"\r",
+									"pm.collectionVariables.set(\"petId\",randomNum);\r",
+									"pm.collectionVariables.set(\"Breed\",randomStr1);\r",
+									"pm.collectionVariables.set(\"dogName\",randomStr2);\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Import the AJV library\r",
+									"const Ajv = require('ajv');\r",
+									"const ajv = new Ajv(); // Create an instance of AJV\r",
+									"\r",
+									"\r",
+									"//expected JSON schema\r",
+									"const schema = {\r",
+									"  \"type\": \"object\",\r",
+									"  \"properties\": {\r",
+									"    \"id\": { \"type\": \"integer\" },\r",
+									"    \"category\": {\r",
+									"      \"type\": \"object\",\r",
+									"      \"properties\": {\r",
+									"        \"id\": { \"type\": \"integer\" },\r",
+									"        \"name\": { \"type\": \"string\" }\r",
+									"      },\r",
+									"      \"required\": [\"id\", \"name\"]\r",
+									"    },\r",
+									"    \"name\": { \"type\": \"string\" },\r",
+									"    \"photoUrls\": {\r",
+									"      \"type\": \"array\",\r",
+									"      \"items\": { \"type\": \"string\" }\r",
+									"    },\r",
+									"    \"tags\": {\r",
+									"      \"type\": \"array\",\r",
+									"      \"items\": {\r",
+									"        \"type\": \"object\",\r",
+									"        \"properties\": {\r",
+									"          \"id\": { \"type\": \"integer\" },\r",
+									"          \"name\": { \"type\": \"string\" }\r",
+									"        },\r",
+									"        \"required\": [\"id\", \"name\"]\r",
+									"      }\r",
+									"    },\r",
+									"    \"status\": { \"type\": \"string\" }\r",
+									"  },\r",
+									"  \"required\": [\"id\", \"category\", \"name\", \"photoUrls\", \"tags\", \"status\"]\r",
+									"};\r",
+									"\r",
+									"// Get the response body\r",
+									"const response_Body = pm.response.json();\r",
+									"\r",
+									"//Test For Status Code 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// Validate the response against the schema using AJV\r",
+									"pm.test(\"Response matches schema\", function() {\r",
+									"  const validate = ajv.compile(schema);\r",
+									"  const valid = validate(response_Body);\r",
+									"  pm.expect(valid).to.be.true;\r",
+									"  if (!valid) {\r",
+									"    pm.expect(validate.errors).to.be.null;\r",
+									"  }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{petId}},\r\n  \"category\": {\r\n    \"id\": {{petId}},\r\n    \"name\": \"{{Breed}}\"\r\n  },\r\n  \"name\": \"{{dogName}}\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": {{petId}},\r\n      \"name\": \"{{dogName}}\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_Url}}/pet",
+							"host": [
+								"{{Base_Url}}"
+							],
+							"path": [
+								"pet"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://petstore.swagger.io/v2/pet' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"id\": 0,\r\n  \"category\": {\r\n    \"id\": 0,\r\n    \"name\": \"string\"\r\n  },\r\n  \"name\": \"doggie\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "Pet Details By ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get the response body\r",
+									"const _response = pm.response.json();\r",
+									"\r",
+									"//Test For Status Code 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.expect(_response.id).to.eql(pm.collectionVariables.get(\"petId\"));\r",
+									"pm.expect(_response.category.name).to.eql(pm.collectionVariables.get(\"Breed\"));\r",
+									"pm.expect(_response.name).to.eql(pm.collectionVariables.get(\"dogName\"));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{Base_Url}}/pet/{{petId}}",
+							"host": [
+								"{{Base_Url}}"
+							],
+							"path": [
+								"pet",
+								"{{petId}}"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'GET' \\\r\n  'https://petstore.swagger.io/v2/pet/0' \\\r\n  -H 'accept: application/json'"
+					},
+					"response": []
+				},
+				{
+					"name": "All Pets By Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"All status values are 'available'\", function () {\r",
+									"    var jsonData = pm.response.json();  // Parse the JSON response\r",
+									"\r",
+									"    // Iterate over each item in the response array\r",
+									"    jsonData.forEach(function(item) {\r",
+									"        pm.expect(item.status).to.eql(\"available\");  // Check if 'status' is 'available'\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{Base_Url}}/pet/findByStatus?status=available",
+							"host": [
+								"{{Base_Url}}"
+							],
+							"path": [
+								"pet",
+								"findByStatus"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "pending",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "sold",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "available"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl -X 'GET' \\\r\n  'https://petstore.swagger.io/v2/pet/findByStatus?status=available' \\\r\n  -H 'accept: application/json'"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Pet Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get the response body\r",
+									"const responseBody_ = pm.response.json();\r",
+									"\r",
+									"//Test For Status Code 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.expect(responseBody_.status).to.eql(\"pending\");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"packages": {},
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{petId}},\r\n  \"category\": {\r\n    \"id\": {{petId}},\r\n    \"name\": \"{{Breed}}\"\r\n  },\r\n  \"name\": \"{{dogName}}\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": {{petId}},\r\n      \"name\": \"{{dogName}}\"\r\n    }\r\n  ],\r\n  \"status\": \"pending\"// Update Statement\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_Url}}/pet",
+							"host": [
+								"{{Base_Url}}"
+							],
+							"path": [
+								"pet"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'PUT' \\\r\n  'https://petstore.swagger.io/v2/pet' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"id\": 0,\r\n  \"category\": {\r\n    \"id\": 0,\r\n    \"name\": \"string\"\r\n  },\r\n  \"name\": \"doggie\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Pet Details By ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{Base_Url}}/pet/{{petId}}",
+							"host": [
+								"{{Base_Url}}"
+							],
+							"path": [
+								"pet",
+								"{{petId}}"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'DELETE' \\\r\n  'https://petstore.swagger.io/v2/pet/6' \\\r\n  -H 'accept: application/json'"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Store",
+			"item": [
+				{
+					"name": "Get Store Inventory",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// variable declaration to catch the response\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"//Test For Status Code 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Test For Data Type Verification\r",
+									"pm.test(\"Get Response Data Type Verification \",()=>{\r",
+									"    pm.expect(responseData.sold).to.be.a(\"number\");\r",
+									"    pm.expect(responseData.string).to.be.a(\"number\");\r",
+									"    pm.expect(responseData.available).to.be.a(\"number\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_Url}}/store/inventory",
+							"host": [
+								"{{Base_Url}}"
+							],
+							"path": [
+								"store",
+								"inventory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Place Order",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const randomNum1 = Math.floor((Math.random()*100+1));\r",
+									"const randomNum2 = Math.floor((Math.random()*100+1));\r",
+									"const randomNum3 = Math.floor((Math.random()*100+1));\r",
+									"\r",
+									"pm.collectionVariables.set(\"storeId\",randomNum1);\r",
+									"pm.collectionVariables.set(\"petId\",randomNum2);\r",
+									"pm.collectionVariables.set(\"quantity\",randomNum3);\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// variable declaration to catch the response\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"//Test For Status Code 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Test For Data Type Verification\r",
+									"pm.test(\"Get Response Data Type Verification \",()=>{\r",
+									"    pm.expect(responseData.id).to.be.a(\"number\");\r",
+									"    pm.expect(responseData.petId).to.be.a(\"number\");\r",
+									"    pm.expect(responseData.quantity).to.be.a(\"number\");\r",
+									"    pm.expect(responseData.status).to.be.a(\"string\");\r",
+									"    pm.expect(responseData.complete).to.be.a(\"boolean\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.expect(responseData.id).to.eql(pm.collectionVariables.get(\"storeId\"));\r",
+									"pm.expect(responseData.petId).to.eql(pm.collectionVariables.get(\"petId\"));\r",
+									"pm.expect(responseData.quantity).to.eql(pm.collectionVariables.get(\"quantity\"));\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{storeId}},\r\n  \"petId\": {{petId}},\r\n  \"quantity\": {{quantity}},\r\n  \"shipDate\": \"2025-01-10T04:04:26.144Z\",\r\n  \"status\": \"placed\",\r\n  \"complete\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_Url}}/store/order",
+							"host": [
+								"{{Base_Url}}"
+							],
+							"path": [
+								"store",
+								"order"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://petstore.swagger.io/v2/store/order' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"id\": 0,\r\n  \"petId\": 0,\r\n  \"quantity\": 0,\r\n  \"shipDate\": \"2025-01-10T04:04:26.144Z\",\r\n  \"status\": \"placed\",\r\n  \"complete\": true\r\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order By Purchase ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// variable declaration to catch the response\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"//Test For Status Code 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Test For Data Type Verification\r",
+									"pm.test(\"Get Response Data Type Verification \",()=>{\r",
+									"    pm.expect(responseData.id).to.be.a(\"number\");\r",
+									"    pm.expect(responseData.petId).to.be.a(\"number\");\r",
+									"    pm.expect(responseData.quantity).to.be.a(\"number\");\r",
+									"    pm.expect(responseData.status).to.be.a(\"string\");\r",
+									"    pm.expect(responseData.complete).to.be.a(\"boolean\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.expect(responseData.id).to.eql(pm.collectionVariables.get(\"storeId\"));\r",
+									"pm.expect(responseData.petId).to.eql(pm.collectionVariables.get(\"petId\"));\r",
+									"pm.expect(responseData.quantity).to.eql(pm.collectionVariables.get(\"quantity\"));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{Base_Url}}/store/order/{{storeId}}",
+							"host": [
+								"{{Base_Url}}"
+							],
+							"path": [
+								"store",
+								"order",
+								"{{storeId}}"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'GET' \\\r\n  'https://petstore.swagger.io/v2/store/order/1' \\\r\n  -H 'accept: application/json'"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"//Test For Status Code 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{Base_Url}}/store/order/{{storeId}}",
+							"host": [
+								"{{Base_Url}}"
+							],
+							"path": [
+								"store",
+								"order",
+								"{{storeId}}"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'DELETE' \\\r\n  'https://petstore.swagger.io/v2/store/order/1' \\\r\n  -H 'accept: application/json'"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Add User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"//test\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const randomNum = Math.floor((Math.random()*100+1));\r",
+									"var randomStr = Math.random().toString(36).substring(2,2+4);\r",
+									"\r",
+									"pm.collectionVariables.set(\"id_no\",randomNum);\r",
+									"pm.collectionVariables.set(\"user_name\",randomStr);\r",
+									"pm.collectionVariables.set(\"first_Name\",randomStr);\r",
+									"pm.collectionVariables.set(\"last_Name\",randomStr);\r",
+									"pm.collectionVariables.set(\"email_\",randomStr+\"@vibez.com\");\r",
+									"pm.collectionVariables.set(\"password_\",randomStr+\"@12Ab\");\r",
+									"pm.collectionVariables.set(\"phone_\",\"995588632\");\r",
+									"pm.collectionVariables.set(\"user_Status\",0);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"id\": {{id_no}},\r\n    \"username\": \"{{user_name}}\",\r\n    \"firstName\": \"{{first_Name}}\",\r\n    \"lastName\": \"{{last_Name}}\",\r\n    \"email\": \"{{email_}}\",\r\n    \"password\": \"{{password_}}\",\r\n    \"phone\": \"{{phone_}}\",\r\n    \"userStatus\": {{user_Status}}\r\n  }\r\n]"
+						},
+						"url": {
+							"raw": "{{Base_Url}}/user/createWithList",
+							"host": [
+								"{{Base_Url}}"
+							],
+							"path": [
+								"user",
+								"createWithList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// variable declaration to catch the response\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"//Test For Status Code 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Test For Data Type Verification\r",
+									"pm.test(\"Get Response Data Type Verification \",()=>{\r",
+									"\r",
+									"pm.expect(responseData.id).to.be.a(\"Number\");\r",
+									"pm.expect(responseData.username).to.be.a(\"String\");\r",
+									"pm.expect(responseData.firstName).to.be.a(\"String\");\r",
+									" pm.expect(responseData.lastName).to.be.a(\"String\");\r",
+									" pm.expect(responseData.email).to.be.a(\"String\");\r",
+									" pm.expect(responseData.password).to.be.a(\"String\");\r",
+									" pm.expect(responseData.phone).to.be.a(\"String\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//Test For Response Value Verification\r",
+									"pm.test(\"Get Response value Verification \",()=>{\r",
+									"\r",
+									"pm.expect(responseData.id).to.eql(pm.collectionVariables.get(\"id_no\"));\r",
+									"pm.expect(responseData.username).to.eql(pm.collectionVariables.get(\"user_name\"));\r",
+									"pm.expect(responseData.firstName).to.eql(pm.collectionVariables.get(\"first_Name\"));\r",
+									" pm.expect(responseData.lastName).to.eql(pm.collectionVariables.get(\"last_Name\"));\r",
+									" pm.expect(responseData.email).to.eql(pm.collectionVariables.get(\"email_\"));\r",
+									" pm.expect(responseData.password).to.eql(pm.collectionVariables.get(\"password_\"));\r",
+									" pm.expect(responseData.phone).to.eql(pm.collectionVariables.get(\"phone_\"));\r",
+									"  pm.expect(responseData.userStatus).to.eql(pm.collectionVariables.get(\"user_Status\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{Base_Url}}/user/{{user_name}}",
+							"host": [
+								"{{Base_Url}}"
+							],
+							"path": [
+								"user",
+								"{{user_name}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var updateStr = Math.random().toString(36).substring(2);\r",
+									"pm.collectionVariables.set(\"password\",updateStr);\r",
+									"pm.collectionVariables.set(\"phone\",\"9956582\");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n  {\r\n    \"id\": {{id_no}},\r\n    \"username\": \"{{user_name}}\",\r\n    \"firstName\": \"{{first_Name}}\",\r\n    \"lastName\": \"{{last_Name}}\",\r\n    \"email\": \"{{email_}}\",\r\n    \"password\": \"{{password}}\",\r\n    \"phone\": \"{{phone}}\",\r\n    \"userStatus\": {{user_Status}}\r\n  }\r\n"
+						},
+						"url": {
+							"raw": "{{Base_Url}}/user/{{user_name}}",
+							"host": [
+								"{{Base_Url}}"
+							],
+							"path": [
+								"user",
+								"{{user_name}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{Base_Url}}/user/{{user_name}}",
+							"host": [
+								"{{Base_Url}}"
+							],
+							"path": [
+								"user",
+								"{{user_name}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Base_Url",
+			"value": "https://petstore.swagger.io/v2",
+			"type": "string"
+		},
+		{
+			"key": "textData",
+			"value": ""
+		},
+		{
+			"key": "id",
+			"value": ""
+		},
+		{
+			"key": "Breed",
+			"value": ""
+		},
+		{
+			"key": "dogName",
+			"value": ""
+		},
+		{
+			"key": "petId",
+			"value": ""
+		},
+		{
+			"key": "quantity",
+			"value": ""
+		},
+		{
+			"key": "user_name",
+			"value": ""
+		},
+		{
+			"key": "first_Name",
+			"value": ""
+		},
+		{
+			"key": "last_Name",
+			"value": ""
+		},
+		{
+			"key": "email_",
+			"value": ""
+		},
+		{
+			"key": "password_",
+			"value": ""
+		},
+		{
+			"key": "phone_",
+			"value": ""
+		},
+		{
+			"key": "user_Status",
+			"value": ""
+		},
+		{
+			"key": "storeId",
+			"value": ""
+		},
+		{
+			"key": "id_no",
+			"value": ""
+		},
+		{
+			"key": "password",
+			"value": ""
+		},
+		{
+			"key": "phone",
+			"value": ""
+		}
+	]
+}
